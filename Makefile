@@ -18,4 +18,19 @@ nats:
 nats-stop:
 	docker-compose -f nats-cluster.yml down && docker-compose -f nats-cluster.yml stop
 
+init-schema:
+	migrate create -ext sql -dir /db/migration -seq init_schema
+
+pg-start:
+	docker-compose -f postgres.yml up
+
+pg-stop:
+	docker-compose -f postgres.yml down && docker-compose -f postgres.yml stop
+
+migrateup:
+	migrate -path ./db/migration -database "postgresql://root:secret@localhosT:5432/simple_bank?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhosT:5432/simple_bank?sslmode=disable" -verbose down
+
 .PHONY: test
