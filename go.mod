@@ -3,6 +3,7 @@ module github.com/lamhai1401/simplebank-ex
 go 1.19
 
 require (
+	github.com/bluele/gcache v0.0.2
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b

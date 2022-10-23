@@ -36,4 +36,8 @@ migratedown:
 test:
 	go test -v -cover ./...
 
-.PHONY: test
+test-local:
+	go test -v -race -coverprofile=c.out -cover ./... ./tests/...
+	go tool cover -html=c.out -o coverage.html
+
+.PHONY: test test-local
