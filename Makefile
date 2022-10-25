@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 proto:
-	protoc ./evenstream/eventstore/*.proto \
+	protoc ./*.proto \
 		--go_out=. \
 		--go-grpc_out=. \
 		--go_opt=paths=source_relative \
@@ -39,5 +39,8 @@ test:
 test-local:
 	go test -v -race -coverprofile=c.out -cover ./... ./tests/...
 	go tool cover -html=c.out -o coverage.html
+
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/lamhai1401/simplebank-ex/db/sqlc Store
 
 .PHONY: test test-local
