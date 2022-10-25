@@ -36,24 +36,31 @@ jobs:
 
     - run:
         name: Build Docker image
-        command: docker build -t simplebank-ex:test .
+        command: docker build -t $IMAGE_NAME:test .
 
+  publish-latest:
+    environment:
+      IMAGE_NAME: lamhai141/simplebank-ex:test
+    docker:
+    - image: circleci/buildpack-deps:stretch
+    steps:
+    - setup_remote_docker
     - run:
-        name: Tag Docker image
-        command: docker tag -a simplebank-ex:test $IMAGE_NAME:test
-
-    - run:
-        name: Login Docker hub
-        command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWD
-
-    - run:
-        name: Push to DockerHub
-        command: docker push $IMAGE_NAME:test
+        name: Publish Docker Image to Docker Hub
+        command: |
+          echo "$DOCKER_HUB_PASSWD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+          docker push $IMAGE_NAME:test
 workflows:
   version: 2
   build-master:
     jobs:
     - build:
+        filters:
+          branches:
+            only: staging
+    - publish-latest:
+        requires:
+        - build
         filters:
           branches:
             only: staging
