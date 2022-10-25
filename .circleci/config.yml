@@ -57,7 +57,7 @@ jobs:
   publish-tag:
     executor: docker-publisher
     environment:
-      IMAGE_TAG: ${CIRCLE_TAG/v/test}
+      IMAGE_TAG: ${CIRCLE_TAG/v/''}
     steps:
     - attach_workspace:
         at: /tmp/workspace
