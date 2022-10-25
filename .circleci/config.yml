@@ -11,7 +11,7 @@ jobs:
   build:
     working_directory: ~/repo
     environment:
-      IMAGE_NAME: lamhai141/simplebank-ex:test
+      IMAGE_NAME: lamhai141/simplebank-ex
     docker:
     - image: cimg/go:1.15.10
     - image: circleci/buildpack-deps:stretch
@@ -37,7 +37,6 @@ jobs:
     - run:
         name: Build Docker image
         command: docker build -t $IMAGE_NAME:test .
-
   publish-latest:
     environment:
       IMAGE_NAME: lamhai141/simplebank-ex:test
