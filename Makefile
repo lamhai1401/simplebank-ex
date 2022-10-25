@@ -43,4 +43,7 @@ test-local:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/lamhai1401/simplebank-ex/db/sqlc Store
 
+run:
+	go run .
+
 .PHONY: test test-local
