@@ -40,7 +40,7 @@ jobs:
 
   publish-latest:
     environment:
-      IMAGE_NAME: lamhai141/simplebank-ex:test
+      IMAGE_NAME: lamhai141/simplebank-ex
     docker:
     - image: circleci/buildpack-deps:stretch
     steps:
