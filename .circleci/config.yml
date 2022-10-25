@@ -72,7 +72,7 @@ jobs:
         command: docker tag $IMAGE_NAME:test $IMAGE_NAME:test
     - run:
         name: Publish Docker Image to Docker Hub
-        command: docker push $IMAGE_NAME:$test
+        command: docker push $IMAGE_NAME:test
 
 workflows:
   version: 2
