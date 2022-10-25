@@ -3,13 +3,15 @@
 version: 2.1
 
 orbs:
-  heroku: circleci/heroku@0.0.10
+  heroku: circleci/heroku@1.2.6
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
     working_directory: ~/repo
+    environment:
+      IMAGE_NAME: lamhai141/simplebank-ex:test
     docker:
     - image: cimg/go:1.15.10
     steps:
@@ -24,11 +26,46 @@ jobs:
         key: go-mod-v4-{{ checksum "go.sum" }}
         paths:
         - /go/pkg/mod
+
     - run:
         name: Run all tests
         command: make test
 
+    - run:
+        name: Install Docker client
+        command: |
+          set -x
+          VER="17.03.0-ce"
+          curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+          tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+          mv /tmp/docker/* /usr/bin
+
+    - run:
+        name: Build Docker image
+        command: docker build -t simplebank-ex:test .
+
+    - run:
+        name: Tag Docker image
+        command: docker tag -a simplebank-ex:test $IMAGE_NAME:test
+
+    - run:
+        name: Login Docker hub
+        command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWD
+
+    - run:
+        name: Push to DockerHub
+        command: docker push $IMAGE_NAME:test
+
+# workflows:
+#   heroku_deploy:
+#     jobs:
+#       - build
+
 workflows:
-  heroku_deploy:
+  version: 2
+  build-master:
     jobs:
-    - heroku/deploy-via-git
+    - build:
+        filters:
+          branches:
+            only: staging
