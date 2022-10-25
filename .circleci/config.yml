@@ -14,6 +14,7 @@ jobs:
       IMAGE_NAME: lamhai141/simplebank-ex:test
     docker:
     - image: cimg/go:1.15.10
+    - image: circleci/buildpack-deps:stretch
     steps:
     - checkout
     - restore_cache:
@@ -31,14 +32,7 @@ jobs:
         name: Run all tests
         command: make test
 
-    - run:
-        name: Install Docker client
-        command: |
-          set -x
-          VER="17.03.0-ce"
-          curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
-          tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-          sudo mv /tmp/docker/* /usr/bin
+    - setup_remote_docker
 
     - run:
         name: Build Docker image
@@ -55,12 +49,6 @@ jobs:
     - run:
         name: Push to DockerHub
         command: docker push $IMAGE_NAME:test
-
-# workflows:
-#   heroku_deploy:
-#     jobs:
-#       - build
-
 workflows:
   version: 2
   build-master:
