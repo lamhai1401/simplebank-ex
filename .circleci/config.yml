@@ -54,7 +54,7 @@ jobs:
         paths:
         - ./image.tar
 
-  publish-latest:
+  publish-tag:
     executor: docker-publisher
     steps:
     - attach_workspace:
@@ -63,15 +63,23 @@ jobs:
     - run:
         name: Load archived Docker image
         command: docker load -i /tmp/workspace/image.tar
-    - run:
-        name: Login to docker
-        command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWD
-    - run:
-        name: Tag docker
-        command: docker tag $IMAGE_NAME:test $IMAGE_NAME:test
+      # - run:
+      #     name: Login to docker
+      #     command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWD
+      # - run:
+      #     name: Tag docker
+      #     command: docker tag $IMAGE_NAME:test $IMAGE_NAME:test
+      # - run:
+      #     name: Publish Docker Image to Docker Hub
+      #     command: docker push $IMAGE_NAME:test
     - run:
         name: Publish Docker Image to Docker Hub
-        command: docker push $IMAGE_NAME:test
+        command: |
+          echo "$DOCKER_HUB_PASSWD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+          IMAGE_TAG=${CIRCLE_TAG/v/''}
+          docker tag $IMAGE_NAME:test $IMAGE_NAME:$IMAGE_TAG
+          docker push $IMAGE_NAME:test
+          docker push $IMAGE_NAME:$IMAGE_TAG
 
 workflows:
   version: 2
@@ -81,9 +89,16 @@ workflows:
         filters:
           branches:
             only: staging
-    - publish-latest:
+            ignore: /.*/
+          tags:
+            only: /^v.*/
+
+    - publish-tag:
         requires:
         - build
         filters:
           branches:
             only: staging
+            ignore: /.*/
+          tags:
+            only: /^v.*/
