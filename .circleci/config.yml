@@ -37,6 +37,7 @@ jobs:
     - run:
         name: Build Docker image
         command: docker build -t $IMAGE_NAME:test .
+
   publish-latest:
     environment:
       IMAGE_NAME: lamhai141/simplebank-ex:test
@@ -45,10 +46,12 @@ jobs:
     steps:
     - setup_remote_docker
     - run:
+        name: Login to docker
+        command: docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWD
+    - run:
         name: Publish Docker Image to Docker Hub
-        command: |
-          echo "$DOCKER_HUB_PASSWD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-          docker push $IMAGE_NAME:test
+        command: docker push $IMAGE_NAME:test
+
 workflows:
   version: 2
   build-master:
