@@ -6,7 +6,6 @@ require (
 	github.com/bluele/gcache v0.0.2
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-gonic/gin v1.8.1
-	github.com/quasilyte/go-ruleguard/dsl v0.3.21
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b

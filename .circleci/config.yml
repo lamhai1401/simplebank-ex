@@ -89,3 +89,12 @@ workflows:
         filters:
           branches:
             only: staging
+
+    - heroku_deploy:
+        jobs:
+        - heroku/deploy-via-git
+        requires:
+        - build
+        filters:
+          branches:
+            only: staging

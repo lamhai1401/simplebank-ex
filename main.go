@@ -6,7 +6,7 @@ func main() {
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "Welcome to the Go Registration API updated dockerhub",
+			"message": "Welcome to the Go Registration API updated dockerhub, deploy to heroku",
 		})
 	})
 
@@ -23,5 +23,5 @@ func main() {
 			"email":    email,
 		})
 	})
-	r.Run()
+	_ = r.Run()
 }
