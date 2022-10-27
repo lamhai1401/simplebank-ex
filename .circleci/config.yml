@@ -90,9 +90,15 @@ workflows:
           branches:
             only: staging
 
+    - hold:
+        type: approval   # <<< This key-value pair will set your workflow to a status of "On Hold"
+        requires:   # We only run the "hold" job when test2 has succeeded
+        - build
+        - publish-tag
+
     - heroku/deploy-via-git:
         requires:
-        - build
+        - hold
         filters:
           branches:
             only: staging
