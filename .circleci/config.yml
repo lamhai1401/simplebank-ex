@@ -40,7 +40,7 @@ jobs:
         name: Building binary
         command: |
           mkdir /tmp/artifacts;
-          go build . -o simplebank;
+          go build -o simplebank;
           cp -a ./simplebank /tmp/artifacts/;
     - store_artifacts:
         path: /tmp/artifacts
