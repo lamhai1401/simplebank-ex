@@ -45,9 +45,9 @@ jobs:
     - store_artifacts:
         path: /tmp/artifacts
     - persist_to_workspace:
-        root: ./tmp/artifacts/
+        root: /tmp/artifacts/
         paths:
-        - ./simplebank;
+        - simplebank;
 
   building_image:
     executor: docker-publisher
