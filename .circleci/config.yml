@@ -89,8 +89,7 @@ jobs:
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    # - setup_remote_docker:
-    #     docker_layer_caching: true # DLC will explicitly cache layers here and try to avoid 
+    - setup_remote_docker
     - run:
         name: Load archived Docker image
         command: docker load -i /tmp/workspace/image.tar
