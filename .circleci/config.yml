@@ -11,6 +11,7 @@ executors:
 
 orbs:
   heroku: circleci/heroku@1.2.6
+  codecov: codecov/codecov@1.0.2
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -35,11 +36,15 @@ jobs:
         - /go/pkg/mod
     - run:
         name: Run all tests
-        command: make test
+        command: |
+          mkdir /tmp/artifacts;
+          make test-local;
+          cp -a ./coverage.html /tmp/artifacts/;
+    - codecov/upload: # upload coverage file
+        file: /tmp/artifacts/coverage.html
     - run:
         name: Building binary
         command: |
-          mkdir /tmp/artifacts;
           go build -o simplebank;
           cp -a ./simplebank /tmp/artifacts/;
     - store_artifacts:
@@ -64,7 +69,8 @@ jobs:
                 COPY ./app ./
                 EXPOSE 8080
                 CMD ["app"]" > dockerfile;
-    - setup_remote_docker
+    - setup_remote_docker:
+        docker_layer_caching: true # DLC will explicitly cache layers here and try to avoid 
     - run:
         name: Build Docker image
         command: docker build -t $IMAGE_NAME:test .
@@ -83,7 +89,8 @@ jobs:
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    - setup_remote_docker
+    # - setup_remote_docker:
+    #     docker_layer_caching: true # DLC will explicitly cache layers here and try to avoid 
     - run:
         name: Load archived Docker image
         command: docker load -i /tmp/workspace/image.tar
