@@ -1,0 +1,41 @@
+syntax = "proto3";
+// tên package được sinh ra
+package proto;
+option go_package="./proto";
+
+message User {
+    string full_name = 1;
+	string email = 2;
+}
+
+message CreateUserRequest {
+    string id = 1;
+    string full_name = 2;
+    string password = 3;
+	string email = 4;
+}
+
+message CreateUserResponse {
+    User user = 1;
+    string err = 2;
+}
+
+message FindUserRequest {
+    string email = 1;
+}
+
+message FindUserResponse {
+    User user = 1;
+    string err = 2;
+}
+
+service UserService {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+    }
+    rpc FindUser (FindUserRequest) returns (FindUserRequest) {
+    }
+    // rpc DisableUser (DisableUserRequest) returns (DisableUserResponse) {
+    // }
+    // rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {
+    // }
+}
