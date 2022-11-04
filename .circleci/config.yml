@@ -40,14 +40,14 @@ jobs:
         name: Run all tests
         command: |
           mkdir /tmp/artifacts;
-          go test -v -race -coverprofile=c.out -cover $(go list ./... | circleci tests split)
+          go test -v -race -coverprofile=c.out -cover ./...
           go tool cover -html=c.out -o coverage.html;
           cp -a ./coverage.html /tmp/artifacts/;
     - codecov/upload:   # upload coverage file
         file: /tmp/artifacts/coverage.html
 
     - store_test_results:
-        path: /tmp/artifacts/coverage.html
+        path: /tmp/artifacts
 
     - run:
         name: Building binary
