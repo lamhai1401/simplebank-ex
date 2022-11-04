@@ -23,7 +23,7 @@ jobs:
     docker:
     - image: cimg/go:1.15.10
     resource_class: large
-    parallelism: 10
+    parallelism: 3
     steps:
     - checkout
     - restore_cache:
@@ -40,10 +40,15 @@ jobs:
         name: Run all tests
         command: |
           mkdir /tmp/artifacts;
-          make test-circle;
+          go test -v -race -coverprofile=c.out -cover $(go list ./... | circleci tests split --split-by=timings);
+          go tool cover -html=c.out -o coverage.html
           cp -a ./coverage.html /tmp/artifacts/;
-    - codecov/upload: # upload coverage file
+    - codecov/upload:   # upload coverage file
         file: /tmp/artifacts/coverage.html
+
+    - store_test_results:
+        path: /tmp/artifacts/coverage.html
+
     - run:
         name: Building binary
         command: |
@@ -72,7 +77,7 @@ jobs:
                 EXPOSE 8080
                 CMD ["app"]" > dockerfile;
     - setup_remote_docker:
-        docker_layer_caching: true # DLC will explicitly cache layers here and try to avoid 
+        docker_layer_caching: true   # DLC will explicitly cache layers here and try to avoid
     - run:
         name: Build Docker image
         command: docker build -t $IMAGE_NAME:test .
@@ -136,7 +141,7 @@ workflows:
     #       - build
     #     filters:
     #       tags:
-    #         only: /^v.*/  
+    #         only: /^v.*/
     # - deploy:
     #     requires:
     #       - prod
