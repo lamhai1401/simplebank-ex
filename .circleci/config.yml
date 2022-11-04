@@ -40,8 +40,8 @@ jobs:
         name: Run all tests
         command: |
           mkdir /tmp/artifacts;
-          go test -v -race -coverprofile=c.out -cover $(go list ./... | circleci tests split);
-          go tool cover -html=c.out -o coverage.html
+          go test -v $(go list ./... | circleci tests split --split-by=timings);
+          go tool cover -html=c.out -o coverage.html;
           cp -a ./coverage.html /tmp/artifacts/;
     - codecov/upload:   # upload coverage file
         file: /tmp/artifacts/coverage.html
