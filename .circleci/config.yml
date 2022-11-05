@@ -51,10 +51,10 @@ jobs:
     - run:
         name: Run and save test
         command: |
-          PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings --timings-type=classname)
+          PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings)
           gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
     - store_test_results:
-        path: $TEST_RESULTS
+        path: /tmp/artifacts/
 
     - run:
         name: Building binary
