@@ -51,7 +51,7 @@ jobs:
     - run:
         name: Run and save test
         command: |
-          PACKAGE_NAMES=$(go list ./... | circleci tests split)
+          PACKAGE_NAMES=$(go list ./...)
           gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
     - store_test_results:
         path: /tmp/artifacts/
