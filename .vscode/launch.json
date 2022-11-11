@@ -22,7 +22,7 @@
                 "JWT_SECRET":"eUbP9shywUygMx7u",
                 "X_API_KEY":"eUbP9shywUygMx7u",
             },
-            "args": ["500"]
+            "args": ["addsvc","-grpc-addr=8082", "-zipkin-url=http://127.0.0.1:9412"]
         }
     ]
 }

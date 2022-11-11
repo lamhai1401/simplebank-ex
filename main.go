@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	r := gin.Default()
@@ -24,4 +28,21 @@ func main() {
 		})
 	})
 	_ = r.Run()
+
+	factorial(4, func(result int) {
+		fmt.Println("result", result)
+	})
+
+	// cmd.RunGRPCServer()
+}
+
+func factorial(x int, next func(int)) {
+	if x == 0 {
+		next(1)
+	} else {
+		factorial(x-1, func(y int) {
+			fmt.Println(y)
+			next(x * y)
+		})
+	}
 }

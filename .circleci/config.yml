@@ -49,10 +49,15 @@ jobs:
         file: $TEST_RESULTS/coverage.html
 
     - run:
+        name: Copy trending folder
+        command: cp -a ./trending/ $TEST_RESULTS;
+
+    - run:
         name: Run and save test
         command: |
           PACKAGE_NAMES=$(go list ./...)
           gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
+
     - store_test_results:
         path: /tmp/artifacts/
 

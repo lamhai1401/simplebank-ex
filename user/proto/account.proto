@@ -32,7 +32,7 @@ message FindUserResponse {
 service UserService {
     rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
     }
-    rpc FindUser (FindUserRequest) returns (FindUserRequest) {
+    rpc FindUser (FindUserRequest) returns (FindUserResponse) {
     }
     // rpc DisableUser (DisableUserRequest) returns (DisableUserResponse) {
     // }
