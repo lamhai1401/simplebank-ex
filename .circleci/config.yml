@@ -22,7 +22,7 @@ jobs:
       IMAGE_NAME: lamhai141/simplebank-ex
       TEST_RESULTS: /tmp/artifacts
     docker:
-    - image: cimg/go:1.15.10
+    - image: cimg/go:1.19.3
     resource_class: small
     parallelism: 3
     steps:
